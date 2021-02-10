@@ -1,0 +1,19 @@
+#!/bin/bash
+# ------------------------------------------------------------------------------
+# wg-shot-create
+#
+# Description:
+# Command-line tool that create(s) job and shows structure!
+#
+# Usage:
+# optional arguments:
+#   -h, --help            show this help message and exit
+#   -j JOB, --job JOB     job where the shot will be created
+#   -s SHOT_NAMES [SHOT_NAMES ...], --shot_names SHOT_NAMES [SHOT_NAMES ...]
+#                         List of shot()s to create.
+#   -fr FRAME_RANGE [FRAME_RANGE ...], --frame-range FRAME_RANGE [FRAME_RANGE ...]
+#                         Frame range of the shots ingested
+#
+# ------------------------------------------------------------------------------
+
+python -m alfred.cli.maker "$@"
