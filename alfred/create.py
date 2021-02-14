@@ -4,18 +4,19 @@ Alfred create helper...
 import yaml
 import os
 import re
-from alfred.core.connect import wgit
+from alfred.core import connect
 
 
-_cursor = wgit.cursor()
-commit = wgit.commit
+WGID_DATABASE = connect()
+
+
 # TODO: Parse in config
 SHOT_NAME_REGEX = re.compile(r"(?i)(?P<job>[a-z]+)_(?P<scene>\w+)_(?P<code>\w+)")
 
 
 # TODO: Create a configs module
-__dirname = os.path.dirname(__file__
-                            )
+__dirname = os.path.dirname(__file__)
+
 with open(os.path.abspath(f"{__dirname}/configs/alfred.yaml"), "r") as open_config:
     _config = yaml.safe_load(open_config)
 
@@ -67,7 +68,7 @@ def _create_entity(entity, **kwargs):
     script = \
         f"""
         INSERT OR REPLACE INTO {entity}s (id, {insert_keys}) 
-        VALUES ((SELECT id FROM {entity}s WHERE name={repr(kwargs.get("name"))}), 
+        VALUES ((SELECT id FROM {entity}s WHERE code={repr(code)}), 
                 {insert_values});
         """
 
@@ -79,7 +80,7 @@ def job(**kwargs):
     Adds a job entity under the jobs table in the `wgid` database.
 
     Args:
-        kwargs(dict):       Reference alfred configs
+        **kwargs:   Reference alfred configs/alfred.yaml
 
     Returns:
         True if successful, False otherwise
@@ -88,7 +89,7 @@ def job(**kwargs):
     cmd = _create_from_config(key)
     cmd += _create_entity(key, **kwargs)
     # Submit SQL and commit changes
-    _cursor.executescript(cmd)
+    WGID_DATABASE.cursor().executescript(cmd)
 
     return True
 
@@ -98,7 +99,7 @@ def scene(**kwargs):
     Adds a scene entity under the scenes table in the `wgid` database.
 
     Args:
-        kwargs(dict):       Reference alfred configs
+        **kwargs:   Reference alfred configs/alfred.yaml
 
     Returns:
         True if successful
@@ -107,7 +108,7 @@ def scene(**kwargs):
     cmd = _create_from_config(key)
     cmd += _create_entity(key, **kwargs)
     # Submit SQL and commit changes
-    _cursor.executescript(cmd)
+    WGID_DATABASE.cursor().executescript(cmd)
 
     return True
 
@@ -117,7 +118,7 @@ def shot(**kwargs):
     Adds a shot entity under the shots table in the `wgid` database.
 
     Args:
-        kwargs(dict):       Reference alfred configs
+        **kwargs:   Reference alfred configs/alfred.yaml
 
     Returns:
         True if successful
@@ -126,7 +127,7 @@ def shot(**kwargs):
     cmd = _create_from_config(key)
     cmd += _create_entity(key, **kwargs)
     # Submit SQL and commit changes
-    _cursor.executescript(cmd)
+    WGID_DATABASE.cursor().executescript(cmd)
 
     return True
 
@@ -165,7 +166,7 @@ def shots(**kwargs):
         data["name"] = shot_name
         script += _create_entity("shot", **data)
 
-    wgit.executescript(script)
+    WGID_DATABASE.executescript(script)
     return True
 
 

@@ -3,7 +3,7 @@
 import warnings
 from collections import defaultdict
 
-from alfred.core.connect import cursor
+from alfred.core import cursor
 
 
 def _details(query):

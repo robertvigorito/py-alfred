@@ -30,12 +30,12 @@ scene:
 shot:
   # Linked
   job: NULL
-  scene: Null
+  scene: NULL
   renders: NULL
   tasks: NULL
   # Common
   assigned: CHAR(25)
-  code: CHAR(5)
+  code: CHAR(10)
   description: TEXT
   hours: FLOAT
   status: CHAR(25)

@@ -9,7 +9,7 @@ Startup tool, setting configs environments per show needs
 """
 import argparse
 from anytree import Node, RenderTree
-import alfred.search
+import alfred
 import os
 
 # Creating the arg parser
