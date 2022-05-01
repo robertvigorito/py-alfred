@@ -3,7 +3,7 @@
 import warnings
 from collections import defaultdict
 
-from alfred.core.connect import cursor
+from wgid.alfred._core.connect import cursor
 
 
 def _details(query):
@@ -17,13 +17,13 @@ def _details(query):
         (dict) with the query details or empty list.
     """
     # Needs to be before execute, find the columns
-    details = dict()
+    details = {}
     cursor.execute(query)
     columns = [column[0] for column in cursor.description]
 
     # Create a dictionary from the data with key tuple of (id, code) ->> id is unique
     for job in cursor.fetchall():
-        job_dict = dict()
+        job_dict = {}
         for info, column in zip(job, columns):
             job_dict[column] = info
 
@@ -51,6 +51,8 @@ def jobs(job=None):
 
 
 def renders():
+    """Temp docstring.
+    """
     warnings.warn("Render query is under development...")
 
 
@@ -82,7 +84,7 @@ def shots(job=None, scene=None, shot=None, shot_name=None):
     Keyword Args:
         scene (str):        Scene name, defaults to None
         shot (str):         Shot name, defaults to None
-        shot_name (str):     Full shot name, defaults to None
+        shot_name (str):    Full shot name, defaults to None
 
     Returns:
         (dict) with the information of all shot(s) inside the database.
@@ -92,16 +94,18 @@ def shots(job=None, scene=None, shot=None, shot_name=None):
         deats = _details(query)
         key = list(deats.keys())[0]
         return deats.get(key)
-    else:
-        assert job, "job is requred when querying with out shot name!"
-        query = f"SELECT * FROM shots WHERE job='{job.upper()}'"
-        query += f" and scene='{str(scene)}'" if scene else ""
-        query += f" and code='{str(shot)}';" if shot else ";"
+
+    assert job, "job is required when querying with out shot name!"
+    query = f"SELECT * FROM shots WHERE job='{job.upper()}'"
+    query += f" and scene='{str(scene)}'" if scene else ""
+    query += f" and code='{str(shot)}';" if shot else ";"
 
     return _details(query)
 
 
 def versions():
+    """Temp docstring.
+    """
     warnings.warn("Version query is under development...")
 
 

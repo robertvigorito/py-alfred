@@ -1,26 +1,17 @@
+"""Alfred create helper.
 """
-Alfred create helper...
-"""
-import yaml
 import os
 import re
-from alfred.core.connect import wgit
+
+from ._core.connect import wgit
+from . import structure
 
 
 _cursor = wgit.cursor()
 commit = wgit.commit
-# TODO: Parse in config
+
 SHOT_NAME_REGEX = re.compile(r"(?i)(?P<job>[a-z]+)_(?P<scene>\w+)_(?P<code>\w+)")
-
-
-# TODO: Create a configs module
-__dirname = os.path.dirname(__file__
-                            )
-with open(os.path.abspath(f"{__dirname}/configs/alfred.yaml"), "r") as open_config:
-    _config = yaml.safe_load(open_config)
-
-with open(os.path.abspath(f"{__dirname}/configs/structure.yaml"), "r") as open_config:
-    _structure = yaml.safe_load(open_config)
+ROOT = "/vfx/projects"
 
 
 def _create_from_config(key):
@@ -30,10 +21,10 @@ def _create_from_config(key):
     Returns:
         True if successful, False otherwise
     """
-    if not isinstance(key, str) and key in _config:
+    if not isinstance(key, str) and key in structure.database.tables:
         raise ValueError("Please ensure variable is a key of `alfred` configs...")
 
-    columns = " ,".join([f"{key} {item}" for key, item in _config.get(key, {}).items()])
+    columns = " ,".join([f"{key} {item}" for key, item in structure.database.tables.get(key, {}).items()])
     cmd = f"CREATE TABLE if not exists {key}s (id INTEGER PRIMARY KEY AUTOINCREMENT, {columns});"
 
     return cmd
@@ -56,16 +47,16 @@ def _create_entity(entity, **kwargs):
     if code is None:
         raise ValueError("Cannot proceed without a unique `code` name...")
 
-    for key, item in _config.get(entity, {}).items():
+    for key, _ in structure.database.tables.get(entity, {}).items():
         value = kwargs.get(key)
         if value is None:
             continue
 
-        keys.append(key), values.append(repr(value))
+        keys.append(key)
+        values.append(repr(value))
 
     insert_keys, insert_values = ", ".join(keys), ", ".join(values)
-    script = \
-        f"""
+    script = f"""
         INSERT OR REPLACE INTO {entity}s (id, {insert_keys}) 
         VALUES ((SELECT id FROM {entity}s WHERE name={repr(kwargs.get("name"))}), 
                 {insert_values});
@@ -160,7 +151,7 @@ def shots(**kwargs):
         if match is None:
             continue
 
-        data = data if isinstance(data, dict) else dict()
+        data = data if isinstance(data, dict) else {}
         data.update(match.groupdict())
         data["name"] = shot_name
         script += _create_entity("shot", **data)
@@ -186,8 +177,8 @@ def _recursive_structure(data, path=""):
             yield os.path.join(path, key)
 
         elif isinstance(items, dict):
-            for p in _recursive_structure(items, os.path.join(path, key)):
-                yield p
+            for recursive_path in _recursive_structure(items, os.path.join(path, key)):
+                yield recursive_path
 
         elif hasattr(items, "__iter__"):
             for item in items:
@@ -196,7 +187,8 @@ def _recursive_structure(data, path=""):
             yield os.path.join(path, key, str(items))
 
 
-def structure(job=None, shot_names=None):
+def construct(job=None, shot_names=None):  # pylint: disable=redefined-outer-name)
+
     """
     Constructs the new project in the jobs directory by parsing the structure
     configs and create the folder structure.
@@ -212,13 +204,11 @@ def structure(job=None, shot_names=None):
         context = {"job": job, "shot": shot_name, "scene": "scrap"}
         match = SHOT_NAME_REGEX.match(shot_name)
 
-        if not any([match, job]):
-            continue
-        elif match:
+        if any([match, job]):
             context.update(match.groupdict())
 
-        for path in _recursive_structure(_structure, "/jobs"):
-            path = path.format(**context)
-            os.system(f"mkdir -p {path}")
+        for path in _recursive_structure(structure.folder_hierarchy, ROOT):
+            path.format(**context)
+            os.makedirs(name=path, exist_ok=True)
 
     return True

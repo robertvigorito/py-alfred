@@ -1,7 +1,7 @@
 [project]
 name = "alfred"
-version = "0.1.0"
-description = "Database pipeline manager and creater"
+version = "0.2.0"
+description = "API that manages wgid pipeline."
 readme = "README.md"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -16,7 +16,6 @@ classifiers = [
 ]
 requires-python = ">=3.4"
 license = {file = "LICENSE"}
-
 dependencies = [
     "pytest",
     "requests",
@@ -27,16 +26,13 @@ dependencies = [
     "requests",
     "bs4",
 ]
-#[tool.setuptools]
-#packages = ["alfred"]
-#include-package-data = true
-
-
-#[tool.setuptools.packages.find]
-#include = ["alfred*"]
 
 [tool.setuptools.package-dir]
 "wgid.alfred" = "alfred"
+
+[project.scripts]
+wg-shot-create = "wgid.alfred.cli.maker:create"
+wg-showtime = "wgid.alfred.showtime:its_showtime"
 
 # Poety Setup
 [tool.poetry]
@@ -63,11 +59,15 @@ wg-shot-create = "alfred.cli.maker:create"
 requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
+[tool.pylint.'MESSAGES CONTROL']
+max-line-length = 120
+disable = "C0330, R0201, 0326"
+
 [tool.tox]
 legacy_tox_ini = """
 [tox]
 isolated_build = true
-envlist = py37, py38, py39
+envlist = py36, py37, py38, py39, py310
 
 [testenv]
 whitelist_externals = poetry

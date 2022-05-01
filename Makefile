@@ -52,7 +52,15 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
+lint:
+	pylint `git ls-files "*.py"`
+
+install: clean
+	pip install --upgrade .
+
 test: ## run tests quickly with the default Python
+	$(MAKE) install
+	pylint $(package) --exit-zero
 	pytest
 
 test-all: ## run tests on every Python version with tox

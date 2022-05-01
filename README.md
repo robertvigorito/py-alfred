@@ -1,8 +1,8 @@
 # alfred
 [![Issues](https://img.shields.io/github/issues/robertvigorito/alfred.svg?style=for-the-badge)](https://github.com/robertvigorito/alfred/issues)
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555)](https://linkedin.com/in/robvigorito)
-
-[![Build Status](https://travis-ci.com/robertvigorito/alfred.svg?branch=develop)](https://travis-ci.com/robertvigorito/alfred)
+[![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555)](https://linkedin.com/in/robvigorito)\
+[![Build and Test Package](https://github.com/robertvigorito/py-alfred/actions/workflows/python-build.yml/badge.svg)](https://github.com/robertvigorito/py-alfred/actions/workflows/python-build.yml)
+[![Pylint](https://github.com/robertvigorito/py-alfred/actions/workflows/pylint.yml/badge.svg)](https://github.com/robertvigorito/py-alfred/actions/workflows/pylint.yml)
 [![GitHub license](https://img.shields.io/github/license/robertvigorito/alfred.svg)](https://github.com/robertvigorito/alfred/main/LICENSE)
 [![GitHub tag](https://img.shields.io/github/v/tag/robertvigorito/alfred?label=Version)](https://github.com/robertvigorito/alfred/releases)
 ## Introduction
@@ -27,9 +27,9 @@ We currently use [Tox](https://tox.readthedocs.io/en/latest/) and [PyTest](https
     ```sh
     tox
     ```
-2. Running test with Poetry
+2. Running test with make
     ```sh
-    poetry run test
+    make test
     ```
 
 ## Roadmap

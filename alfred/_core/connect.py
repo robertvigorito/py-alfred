@@ -2,10 +2,13 @@
 """
 import sqlite3
 
-# TODO: Move to show configuration
 __WGIT_DATABASE = "/software/config/alfred/wgid.db"
 
-wgit = sqlite3.connect(__WGIT_DATABASE)
+try:
+    wgit = sqlite3.connect(__WGIT_DATABASE)
+except sqlite3.OperationalError:
+    wgit = sqlite3.connect(":memory:")
+
 cursor = wgit.cursor()
 
 del __WGIT_DATABASE
