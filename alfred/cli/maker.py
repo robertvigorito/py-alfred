@@ -9,22 +9,25 @@ optional arguments:
   -fr FRAME_RANGE [FRAME_RANGE ...], --frame-range FRAME_RANGE [FRAME_RANGE ...]
                         Frame range of the shots ingested
 """
-import alfred
 import argparse
+
+from wgid import alfred
 
 
 DATABASE_KWARGS = {}
-# TODO: Configurable
+# TODO: Configurable  # pylint: disable=fixme
 DEFAULT_FRAME_RANGE = "1001-1100"
 
-
 parser = argparse.ArgumentParser(description="Command-line tool that create(s) job and shows structure!")
-parser.add_argument("-j", "--job", default="RND", type=str,
-                    help="job where the shot will be created")
-parser.add_argument("-s", "--shot-name", nargs="+", required=True, type=str,
-                    help="List of shot()s to create.")
-parser.add_argument("-fr", "--frame-range", nargs="+", default="1001-1100", type=str,
-                    help="Frame range of the shots ingested")
+parser.add_argument(
+    "-j", "--job", default="RND", type=str, help="job where the shot will be created"
+)
+parser.add_argument(
+    "-s", "--shot-name", nargs="+", required=True, type=str, help="List of shot()s to create."
+)
+parser.add_argument(
+    "-fr", "--frame-range", nargs="+", default="1001-1100", type=str, help="Frame range of the shots ingested"
+)
 
 
 def create():
@@ -46,7 +49,7 @@ def create():
         DATABASE_KWARGS[shot] = {"frame_range": frame_range}
 
     # Create the folder structure and database entry
-    alfred.create.structure(job=structure["job"], shot_names=structure["shot_name"])
+    alfred.create.construct(job=structure["job"], shot_names=structure["shot_name"])
     alfred.create.shots(**DATABASE_KWARGS)
 
     return True

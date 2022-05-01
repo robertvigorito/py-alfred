@@ -10,14 +10,21 @@ webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
 export BROWSER_PYSCRIPT
 
+package = alfred
+python_root = ./$(package)
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 .PHONY: clean clean-test clean-pyc clean-build docs help script
 
 clean: clean-build clean-pyc clean-test ## remove all build, test, coverage and Python artifacts
 
+build: clean
+	$(eval BUILD_LOCATION=./.build)
+	pip install . -t $(BUILD_LOCATION) --upgrade
+
 clean-build: ## remove build artifacts
 	rm -fr build/
+	rm -fr .build/
 	rm -fr dist/
 	rm -fr .eggs/
 	find . -name '*.egg-info' -exec rm -fr {} +
@@ -35,6 +42,8 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
+clean: clean-test clean-build clean-pyc
+
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/alfred.rst
 	rm -f docs/modules.rst
@@ -43,7 +52,15 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
+lint:
+	pylint `git ls-files "*.py"`
+
+install: clean
+	pip install --upgrade .
+
 test: ## run tests quickly with the default Python
+	$(MAKE) install
+	pylint $(package) --exit-zero
 	pytest
 
 test-all: ## run tests on every Python version with tox

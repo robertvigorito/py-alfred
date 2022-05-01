@@ -7,10 +7,12 @@ Startup tool, setting configs environments per show needs
 # showtime {shot_name}
 # showtime -h --help  # Display tree of current shots
 """
-import argparse
-from anytree import Node, RenderTree
-import alfred.search
 import os
+import argparse
+import sys
+
+from anytree import Node, RenderTree
+from wgid.alfred import search
 
 # Creating the arg parser
 parser = argparse.ArgumentParser()
@@ -34,7 +36,7 @@ def show_tree(job):
     """
     print("# " + "-" * 50)
     print(f"Showtime shots list for `{job.upper()}`\n")
-    query = alfred.search.scenes_shots(args.code)
+    query = search.scenes_shots(args.code)
     job_node = Node(job)
 
     for scene, shots in sorted(query.items()):
@@ -42,8 +44,8 @@ def show_tree(job):
         for shot in sorted(shots):
             Node(shot, parent=scene)
 
-    for p, f, node in RenderTree(job_node):
-        print(f"{p}{node.name}")
+    for parent, _, node in RenderTree(job_node):
+        print(f"{parent}{node.name}")
 
     print("\nExample:\nshowtime {show} {shot-name}")
 
@@ -56,8 +58,8 @@ def its_showtime():
     # Attributes
     job, scene, shot = "", "", ""
     # Validate the code if job or shot name
-    shot_data = alfred.search.shots(shot_name=code)
-    if alfred.search.jobs(code):
+    shot_data = search.shots(shot_name=code)
+    if search.jobs(code):
         job = code
 
     elif shot_data:
@@ -65,18 +67,17 @@ def its_showtime():
 
     else:
         print("Wrong job code provide, try again with correct code...")
-        exit(1)
-        return False
+        sys.exit(1)
 
-    # Show the tree of the show inputed
+    # Display project tree
     if args.tree and not shot_data:
         show_tree(job)
-        exit(1)
+        sys.exit(1)
 
     # Set the environment
     os.environ["JOB"] = job.upper()
     os.environ["SCENE"] = scene.upper()
-    os.environ["SHOTNAME"] = shot.upper()
+    os.environ["SHOT"] = shot.upper()
 
     print("# " + "-" * 50)
     print(f"Showtime: {shot.upper() or job.upper()}!")
