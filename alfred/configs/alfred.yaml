@@ -1,0 +1,43 @@
+status:
+  - complete
+  - in_progress
+  - omit
+  - hold
+  - review
+  - approved
+  - final
+
+job:
+  code: "CHAR(5)"
+  description: "TEXT"
+  format: "CHAR(25)"
+  hours: "FLOAT"
+  lut: "CHAR(25)"
+  name: "CHAR(25)"
+  status: "CHAR(25)"
+
+scene:
+  # Links
+  job: NULL
+  # -
+  assigned: CHAR(25)
+  code: CHAR(5)
+  description: TEXT
+  hours: FLOAT
+  status: CHAR(25)
+  tags: TEXT
+
+shot:
+  # Linked
+  job: NULL
+  scene: Null
+  renders: NULL
+  tasks: NULL
+  # Common
+  assigned: CHAR(25)
+  code: CHAR(5)
+  description: TEXT
+  hours: FLOAT
+  status: CHAR(25)
+  tags: TEXT
+
