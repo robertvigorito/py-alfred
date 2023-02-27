@@ -16,7 +16,7 @@ ROOT = "/vfx/projects"
 
 def _create_from_config(key):
     """
-    Create the table if it doesnt exist for the wgid database.
+    Create the table if it doesn't exist for the wgid database.
 
     Returns:
         True if successful, False otherwise
@@ -144,7 +144,7 @@ def shots(**kwargs):
     script = ""
     for i, (shot_name, data) in enumerate(kwargs.items()):
         match = SHOT_NAME_REGEX.match(shot_name)
-        # Check if the shot table has been create
+        # Check if the shot table has been created
         if i == 0:
             script = _create_from_config("shot")
         # Invalid shot name

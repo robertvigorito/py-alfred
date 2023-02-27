@@ -26,9 +26,9 @@ folder_hierarchy = {
                 ],
                 "maya": [
                     "anim",
-                     "light",
-                     "modeler",
-                     "texture"
+                    "light",
+                    "modeler",
+                    "texture"
                 ],
                 "nuke": [
                     "comp",

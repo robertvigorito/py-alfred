@@ -26,13 +26,22 @@ dependencies = [
     "requests",
     "bs4",
 ]
+#[tool.setuptools]
+## ...
+#package-dir = {"" = "src"}
 
-[tool.setuptools.package-dir]
-"wgid.alfred" = "alfred"
+#[tool.setuptools.package-dir]
+#mypkg = "src"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["alfred*"]  # alternatively: `exclude = ["additional*"]`
+namespaces = false
 
 [project.scripts]
-wg-shot-create = "wgid.alfred.cli.maker:create"
-wg-showtime = "wgid.alfred.showtime:its_showtime"
+wgid-shot-create = "alfred.cli.maker:create"
+showtime = "alfred.showtime:its_showtime"
+st = "alfred.showtime:its_showtime"
 
 # Poety Setup
 [tool.poetry]
@@ -42,18 +51,17 @@ description = "Database pipeline manager and creater"
 authors = ["robert-v <robertvigorito@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = ">=3.6.0,<4"
+python = ">=3.7.0,<4"
 PyYAML = "^5.4.1"
 confuse = "^1.4.0"
 anytree = "^2.8.0"
 requests = "^2.25.1"
 bs4 = "^0.0.1"
+pymongo = "^4.3.3"
 
-[tool.poetry.dev-dependencies]
-pytest = "^4.6"
-
-[tool.poetry.scripts]
-wg-shot-create = "alfred.cli.maker:create"
+[tool.poetry.group.test.dependencies]
+toml = "^0.10.2"
+pytest = "^7.2.1"
 
 [build-system]
 requires = ["setuptools"]
@@ -67,10 +75,10 @@ disable = "C0330, R0201, 0326"
 legacy_tox_ini = """
 [tox]
 isolated_build = true
-envlist = py36, py37, py38, py39, py310
+envlist = py37, py38, py39, py310
 
 [testenv]
-whitelist_externals = poetry
+allowlist_externals = poetry,echo
 commands =
     pip install -U pip
     pip install . pytest

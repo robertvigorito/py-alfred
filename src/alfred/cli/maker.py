@@ -11,7 +11,8 @@ optional arguments:
 """
 import argparse
 
-from wgid import alfred
+# Wgid Imports
+import alfred
 
 
 DATABASE_KWARGS = {}
@@ -39,9 +40,9 @@ def create():
         True is successful
     """
     args = parser.parse_args()
-    structure = args.__dict__.copy()
+    structure = vars(args).copy()
 
-    for i, shot in enumerate(structure.get("shot_name")):
+    for i, shot in enumerate(structure.get("shot_name", [])):
         try:
             frame_range = args.frame_range[i]
         except IndexError:

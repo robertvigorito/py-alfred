@@ -12,7 +12,7 @@ import argparse
 import sys
 
 from anytree import Node, RenderTree
-from wgid.alfred import search
+from alfred import search
 
 # Creating the arg parser
 parser = argparse.ArgumentParser()

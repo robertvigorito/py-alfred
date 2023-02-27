@@ -1,15 +1,13 @@
 """Tests for `alfred` package."""
 import os
+import requests
 import shlex
 import subprocess
-
+import toml
 import unittest
 
-# Third-party Imports
-import requests
-import toml
-
-from wgid import alfred
+# Wgid Imports
+import alfred
 
 
 def test_response():
@@ -20,7 +18,6 @@ def test_response():
     url = "https://github.com/robertvigorito/py-alfred"
     response = requests.get(url)
     assert response.status_code == 200, f"{url} doesnt exist return code {response.status_code}"
-    return True
 
 
 def latest_from_github():
@@ -53,7 +50,7 @@ def test_version():
         pyproject_data = toml.load(pyproject_file)
         toml_version = pyproject_data["project"]["version"]
 
-    # Compare the pyproject and python module version, than current compare with the release version
+    # Compare the pyproject and python module version, then current compare with the release version
     assert toml_version == alfred.__version__, "pyproject.toml and alfred.__version__ don't match"
     assert latest_release < toml_version, f"Please increment the package version, v{latest_release} release exists!"
 
@@ -71,24 +68,21 @@ class TestAlfred(unittest.TestCase):
         """Test command-line tool maker, job/shot creator short format."""
         shot_names = " ".join(["RND_dev_comp", "RND_dev_fx", "RND_dev_pipe"])
         frame_ranges = " ".join(["1001-1024", "1001-1075", "1001-1100"])
-        cmd = f"wg-shot-create -j RND -s {shot_names} -fr {frame_ranges}"
+        cmd = f"wgid-shot-create -j RND -s {shot_names} -fr {frame_ranges}"
         output = subprocess.check_call(shlex.split(cmd))
-        print(output)
 
     def test_maker_long_args(self):
         """Test command-line tool maker, job/shot creator long format."""
         shot_names = " ".join(["RND_dev_comp", "RND_dev_fx", "RND_dev_pipe"])
         frame_ranges = " ".join(["1001-1024", "1001-1075", "1001-1100"])
-        cmd = f"wg-shot-create -j RND --shot-name {shot_names} --frame-range {frame_ranges}"
+        cmd = f"wgid-shot-create -j RND --shot-name {shot_names} --frame-range {frame_ranges}"
         output =  subprocess.check_call(shlex.split(cmd))
 
-        print(output)
 
     def test_maker_missing_frame_range_args(self):
         """Test command-line tool maker, job/shot creator long format."""
         shot_names = " ".join(["RND_dev_comp", "RND_dev_fx", "RND_dev_pipe"])
         frame_ranges = "1001-1024"
-        cmd = f"wg-shot-create -j RND --shot-name {shot_names} --frame-range {frame_ranges}"
+        cmd = f"wgid-shot-create -j RND --shot-name {shot_names} --frame-range {frame_ranges}"
         output = subprocess.check_call(shlex.split(cmd))
         print(output)
-        return True
