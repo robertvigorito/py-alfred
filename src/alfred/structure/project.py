@@ -9,33 +9,30 @@ folder_hierarchy = {
             "sound": {},
             "storyboard": {}
         },
-        "sends": {},
+        "dailies": {},
         # Start scene project structure
-        "{scene}": {
+        "{sequence}": {
             # Start shot project structure
             "{shot}": {
                 "assets": {},
                 "houdini": [
-                    "fx",
+                    "crowds",
                     "env",
-                    "crowds"
-                ],
-                "katana": [
+                    "fx",
                     "light",
-                    "fx"
+                    "lookdev",
                 ],
                 "maya": [
                     "anim",
-                    "light",
                     "modeler",
                     "texture"
                 ],
                 "nuke": [
                     "comp",
-                    "prep",
                     "env",
-                    "light",
                     "fx"
+                    "light",
+                    "prep",
                 ],
                 "renders": {},
                 "substance": [
