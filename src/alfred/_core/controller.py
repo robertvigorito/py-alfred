@@ -26,7 +26,7 @@ def _remap_results(result: dict[str, Any]) -> dict[str, Any]:
 
 
 @Cache.decorator
-def find_one(query=None, *args, **kwargs) -> Union["contexts.Context", None]:
+def find_one(query=None, *args, **kwargs) -> Union["contexts.Context", None]: # pylint: disable=keyword-arg-before-vararg
     """Finds and returns a single context document from the "contexts" collection
     based on the given query.
 
@@ -51,7 +51,7 @@ def find_one(query=None, *args, **kwargs) -> Union["contexts.Context", None]:
 
 
 @Cache.decorator
-def find(query: Dict[str, Any] = None, *args, **kwargs) -> Generator["contexts.Context", None, None]:
+def find(query: Dict[str, Any] = None, *args, **kwargs) -> Generator["contexts.Context", None, None]:  # pylint: disable=keyword-arg-before-vararg
     """Defines a function  called find that takes a dictionary called query as an argument and
     returns a generator that yields instances of the "contexts.Context" class. The function is
     decorated with "@Cache.decorator" to cache the results.

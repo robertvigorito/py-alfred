@@ -70,7 +70,7 @@ class Cache:
         """
         # Assign the first argument to self.query if it exists
         if self.args:
-            self.query = self.args.pop(0)
+            self.query = self.args[0]
 
         # Check if QUERY_KEY exists in kwargs and use it to update self.query
         if QUERY_KEY not in self.kwargs:

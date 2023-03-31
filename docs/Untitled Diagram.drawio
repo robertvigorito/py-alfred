@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" modified="2023-03-24T02:48:33.839Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.51" etag="em8iN9_BoBOfiqeyk0Oo" version="21.1.0" type="github">
+  <diagram name="Page-1" id="FtbimhBMZvsNWdiT7WP3">
+    <mxGraphModel dx="2897" dy="1166" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-1" value="MongoDB" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="720" y="385" width="175" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-17" value="" style="group" vertex="1" connectable="0" parent="1">
+          <mxGeometry x="80" y="290" width="180" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-7" value="Contexts" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.document2;whiteSpace=wrap;size=0.25;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-17">
+          <mxGeometry x="39.111111111111114" y="50" width="97.77777777777777" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-8" value="Assets" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.document2;whiteSpace=wrap;size=0.25;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-17">
+          <mxGeometry x="39.111111111111114" y="170" width="97.77777777777777" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-14" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;fontSize=12;startSize=8;endSize=8;curved=1;exitX=0.55;exitY=-0.022;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.538;entryY=0.851;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="rgs_EFGsOto9uHh8UaOQ-17" source="rgs_EFGsOto9uHh8UaOQ-8" target="rgs_EFGsOto9uHh8UaOQ-7">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="107.55555555555556" y="130" as="sourcePoint" />
+            <mxPoint x="111.46666666666667" y="95" as="targetPoint" />
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-38" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=12;startSize=8;endSize=8;" edge="1" parent="rgs_EFGsOto9uHh8UaOQ-17" source="rgs_EFGsOto9uHh8UaOQ-16">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="330" y="134.8888888888889" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-16" value="Models" style="swimlane;whiteSpace=wrap;html=1;fontSize=16;startSize=23;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-17">
+          <mxGeometry width="180" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-40" style="edgeStyle=none;curved=1;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.453;entryY=0.954;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=12;startSize=8;endSize=8;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="rgs_EFGsOto9uHh8UaOQ-21" target="rgs_EFGsOto9uHh8UaOQ-1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="589" y="431" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="650" y="420" />
+              <mxPoint x="700" y="500" />
+              <mxPoint x="740" y="530" />
+              <mxPoint x="770" y="520" />
+              <mxPoint x="790" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-21" value="Controller" style="swimlane;whiteSpace=wrap;html=1;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="410" y="270" width="180" height="360" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-22" value="Create" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-21">
+          <mxGeometry x="30" y="50" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-23" value="Read" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-21">
+          <mxGeometry x="30" y="130" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-25" value="Update" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-21">
+          <mxGeometry x="30" y="210" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-26" value="Delete" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fontSize=16;" vertex="1" parent="rgs_EFGsOto9uHh8UaOQ-21">
+          <mxGeometry x="30" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-42" value="&lt;h1&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Models&lt;/span&gt;&lt;/h1&gt;&lt;h1&gt;&lt;span style=&quot;font-size: 16px; font-weight: 400;&quot;&gt;The data model is a class of how we want to interact with the data extracted from the database.&amp;nbsp;&lt;/span&gt;&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="75" y="60" width="485" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="rgs_EFGsOto9uHh8UaOQ-43" value="&lt;h1 style=&quot;text-align: right;&quot;&gt;&lt;span style=&quot;background-color: initial;&quot;&gt;Controllers&lt;/span&gt;&lt;/h1&gt;&lt;h1&gt;&lt;span style=&quot;font-size: 16px; font-weight: 400;&quot;&gt;The controller processes retrieve the raw data from the respected database collection and morph the NoSQL data into the defined model for end users.&amp;nbsp;&lt;/span&gt;&lt;/h1&gt;" style="text;html=1;strokeColor=none;fillColor=none;spacing=5;spacingTop=-20;whiteSpace=wrap;overflow=hidden;rounded=0;fontSize=16;flipV=0;flipH=1;" vertex="1" parent="1">
+          <mxGeometry x="410" y="640" width="485" height="190" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

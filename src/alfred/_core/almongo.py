@@ -1,10 +1,10 @@
 """The module allows you to extract the mongodb database collection for CRUD operations.
 """
 import os as _os
+from functools import lru_cache as _lru_cache
 
 import dotenv as _dotenv
 import pymongo as _pymongo
-from functools import lru_cache as _lru_cache
 
 
 _dotenv.load_dotenv()
