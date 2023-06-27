@@ -1,6 +1,6 @@
 """ The worlds best butler, keep it clean.
 """
-from alfred import create, search
+from alfred import create
 
 
 __version__ = "0.2.0"

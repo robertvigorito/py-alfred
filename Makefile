@@ -58,10 +58,13 @@ lint:
 install: clean
 	pip install --upgrade .
 
+poetry-install: clean
+	poetry install 
+
 test: ## run tests quickly with the default Python
-	$(MAKE) install
+	$(MAKE) poetry-install
 	pylint $(package) --exit-zero
-	pytest
+	pytest --cov=$(package) --cov-report=term-missing --cov-fail-under=100 --cov-config=.coveragerc --cov-report=html
 
 test-all: ## run tests on every Python version with tox
 	tox

@@ -1,5 +1,12 @@
 """The location for structure files such as project folder layout and
 database table configuration.
 """
-from . import database  # noqa # pylint: disable=unused-import
-from .project import folder_hierarchy  # noqa # pylint: disable=unused-import
+from alfred.structure.project import (
+    create_many,
+    create_one,
+    recursive_structure,
+    Root,
+    wgid_schema,
+)
+
+__all__ = ["wgid_schema", "create_one", "create_many", "Root", "recursive_structure"]

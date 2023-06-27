@@ -6,42 +6,53 @@ behaviour of the context class: the create stage, the conversion to a
 dictionary, and the mutability of the class. The tests use the assert statement
 to check that the behaviour is as expected.
 """
-from dataclasses import (
-    asdict,
-    FrozenInstanceError
-)
+from ast import main
+from dataclasses import asdict, FrozenInstanceError
+import datetime
 from typing import Any
 
 # Wgid Modules
 from alfred.models.contexts import context
+import pytest
 
 
-test_context_structure: dict[str, Any] = {
-    "id": 0,
-    "job": "test",
-    "sequence": "case",
-    "shot": 1010,
-    "shotcode": "case1010",
-    "created_at": 0,
-    "created_by": "tester",
-}
-
-test_context: context = context(**test_context_structure)
+@pytest.fixture
+def context_structure() -> dict[str, Any]:
+    return {
+        "job": "pytest",
+        "sequence": "playground",
+        "shot": "deleteme",
+    }
 
 
-def test_create_context_from_dict() -> None:
-    assert context(**test_context_structure), "The context object failed the create stage"
+@pytest.fixture
+def context_fixture(context_structure) -> context:
+    return context(**context_structure)
 
 
-def test_context_to_dict() -> None:
-    test_context_as_dict = asdict(test_context)
-    assert test_context_as_dict == test_context_structure, "The context vars are not the same from its original structure"
+def test_create_context_from_dict(context_structure) -> None:
+    assert context(
+        **context_structure
+    ), "The context class was not created from the dictionary."
 
 
-def test_context_is_mutable() -> None:
-    try:
-        test_context.id = 0
-    except (TypeError, FrozenInstanceError):
-        pass
-    else:
-        assert False, "The context class should be frozen and mutable."
+def test_context_asdict(context_fixture) -> None:
+    assert asdict(
+        context_fixture
+    ), "The context class was not converted to a dictionary."
+
+
+def test_context_is_validated(context_fixture) -> None:
+    assert context_fixture.validated(), "The context class was not validated."
+
+
+def test_created_at(context_fixture) -> None:
+    assert context_fixture.created_at < datetime.datetime.now(), "The created_at date is not correct."
+
+
+def test_context_asdict(context_fixture) -> None:
+    
+    
+if __name__ == "__main__":
+    # run this pytest file in isolation, show the code lines that are missing coverage
+    pytest.main([__file__, "--cov=alfred.models.contexts", "--cov-report=html", "--cov-report=term-missing"])

@@ -1,4 +1,4 @@
-""" This module contains functions for interacting with the "contexts" collection in the database.
+"""This module contains functions for interacting with the "contexts" collection in the database.
 """
 from typing import (
     Any,
@@ -22,6 +22,7 @@ def _remap_results(result: dict[str, Any]) -> dict[str, Any]:
         dict: A new dictionary with the keys remapped.
     """
     result["id"] = result.pop("_id")
+
     return result
 
 

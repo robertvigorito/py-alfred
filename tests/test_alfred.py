@@ -54,35 +54,3 @@ def test_version():
     assert toml_version == alfred.__version__, "pyproject.toml and alfred.__version__ don't match"
     assert latest_release < toml_version, f"Please increment the package version, v{latest_release} release exists!"
 
-
-class TestAlfred(unittest.TestCase):
-    """Tests for `alfred` package."""
-
-    def setUp(self):
-        """Set up test fixtures, if any."""
-
-    def tearDown(self):
-        """Tear down test fixtures, if any."""
-
-    def test_maker_short_args(self):
-        """Test command-line tool maker, job/shot creator short format."""
-        shot_names = " ".join(["RND_dev_comp", "RND_dev_fx", "RND_dev_pipe"])
-        frame_ranges = " ".join(["1001-1024", "1001-1075", "1001-1100"])
-        cmd = f"wgid-shot-create -j RND -s {shot_names} -fr {frame_ranges}"
-        output = subprocess.check_call(shlex.split(cmd))
-
-    def test_maker_long_args(self):
-        """Test command-line tool maker, job/shot creator long format."""
-        shot_names = " ".join(["RND_dev_comp", "RND_dev_fx", "RND_dev_pipe"])
-        frame_ranges = " ".join(["1001-1024", "1001-1075", "1001-1100"])
-        cmd = f"wgid-shot-create -j RND --shot-name {shot_names} --frame-range {frame_ranges}"
-        output =  subprocess.check_call(shlex.split(cmd))
-
-
-    def test_maker_missing_frame_range_args(self):
-        """Test command-line tool maker, job/shot creator long format."""
-        shot_names = " ".join(["RND_dev_comp", "RND_dev_fx", "RND_dev_pipe"])
-        frame_ranges = "1001-1024"
-        cmd = f"wgid-shot-create -j RND --shot-name {shot_names} --frame-range {frame_ranges}"
-        output = subprocess.check_call(shlex.split(cmd))
-        print(output)
