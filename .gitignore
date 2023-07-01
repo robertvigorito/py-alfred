@@ -107,3 +107,4 @@ ENV/
 .idea/
 /.build/
 /build/
+dump.rdb

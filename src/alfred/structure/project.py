@@ -131,6 +131,9 @@ def create_one(job: str, sequence: Optional[str] = None, shot: Optional[str] = N
         formatted_path = path.format(job=job, sequence=sequence, shot=shot)
 
         joined_formatted_path = _os.path.join(Root.FACILITY.value, formatted_path)
+        if _os.path.exists(joined_formatted_path):
+            _logger.info("Directory already exists: %s", joined_formatted_path)
+            continue
         _logger.info("Creating directory: %s", joined_formatted_path)
         _os.makedirs(joined_formatted_path, exist_ok=True)
         _logger.info("Directory created: %s", joined_formatted_path)

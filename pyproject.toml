@@ -59,6 +59,7 @@ requests = "^2.25.1"
 bs4 = "^0.0.1"
 pymongo = "^4.3.3"
 python-dotenv = "^1.0.0"
+redis = "^4.6.0"
 
 [tool.poetry.group.test.dependencies]
 toml = "^0.10.2"
