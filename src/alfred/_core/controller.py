@@ -1,16 +1,17 @@
-"""This module contains functions for interacting with the "contexts" collection in the database.
+"""This module contains functions for interacting with the collections in the database and utilises the cache mechanism of 
+redis to improve performance. The functions are decorated with the "@Cache.decorator" to cache the results.
 """
 from typing import (
     Any,
     Dict,
     Generator,
+    Optional,
     Union,
 )
 
+# Wgid Modules
 from alfred._core.cache_handler import Cache
-from alfred._core.almongo import collection
-from alfred.models import contexts
-
+from alfred._core import almongo
 
 def _remap_results(result: dict[str, Any]) -> dict[str, Any]:
     """Remap the id_key and pop_id_key in the given result dictionary.
@@ -52,8 +53,8 @@ def find_one(query=None, *args, **kwargs) -> Union["contexts.Context", None]: # 
 
 
 @Cache.decorator
-def find(query: Dict[str, Any] = None, *args, **kwargs) -> Generator["contexts.Context", None, None]:  # pylint: disable=keyword-arg-before-vararg
-    """Defines a function  called find that takes a dictionary called query as an argument and
+def find(query: Optional[Dict[str, Any]] = None, *args: Any, **kwargs: Any) -> Generator[contexts.Context, None, None]:
+    """Defines a function called find that takes a dictionary called query as an argument and
     returns a generator that yields instances of the "contexts.Context" class. The function is
     decorated with "@Cache.decorator" to cache the results.
 
@@ -65,12 +66,22 @@ def find(query: Dict[str, Any] = None, *args, **kwargs) -> Generator["contexts.C
     Returns:
         Generator[contexts.Context, None, None]: A generator that yields instances of the "contexts.Context" class.
     """
-    query: dict = query or {}
-    context_collection = collection("contexts")
+    query = query or {}
 
-    context_results: Dict[str:Any] = context_collection.find(filter=query, *args, **kwargs)
-    context_results: Generator = (
-        contexts.Context(**_remap_results(context_result)) for context_result in context_results
-    )
+    context_results = almongo.contexts.find(filter=query, *args, **kwargs)
+    for context_result in context_results:
+        context = contexts.Context(**context_result)
+        yield context
 
-    return context_results
+
+
+
+
+
+
+
+
+if __name__ == "__main__":
+    # Find everthing in the contexts collection
+    from pprint import pprint as pp
+    pp(list(find()))

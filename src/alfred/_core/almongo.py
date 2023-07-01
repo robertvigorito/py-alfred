@@ -35,9 +35,9 @@ def __initiate_database():
 
 
 class Collections(_Enum):
-    contexts: str = "contexts"
-    assets: str = "assets"
-    renders: str = "renders"
+    contexts = "contexts"
+    assets = "assets"
+    renders = "renders"
 
 
 contexts = __initiate_database()[Collections.contexts.value]
