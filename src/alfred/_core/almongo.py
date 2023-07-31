@@ -7,6 +7,10 @@ from enum import Enum as _Enum
 import dotenv as _dotenv
 import pymongo as _pymongo
 
+# Protect the module from being imported from any package other than alfred._core.controller
+if __name__ != "alfred._core.controller":
+    raise ImportError("This module is protected can only be imported from alfred._core.controller.")
+
 
 _dotenv.load_dotenv()
     

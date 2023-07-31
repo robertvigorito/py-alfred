@@ -1,10 +1,22 @@
-"""A module that assist in generate alfred data structures.
+"""The `generate` module provides functions for generating Alfred data structures, such as sequence and shot names, 
+for use in context construction.
+
+
+Example usage:
+    >>> from generate import generate_sequence_name, generate_shot_name, parse_shot_name
+    >>> generate_sequence_name("my_project", 1)
+    >>> "my_project_s001"
+    >>> generate_shot_name("my_project_s001", 10)
+    >>> "my_project_s001_010"
+    >>> parse_shot_name("my_project_s001_010")
+    >>> ("my_project_s001", 10)
 """
-import random
-import string
+from math import ceil as _ceil
+import random as _random
+import string as _string
 
 
-def generate_random_sequence(count, length=3):
+def generate_random_sequence(count, length=3, numeric_only=False, string_only=False):
     """Generates random sequences.
 
     Args:
@@ -15,32 +27,20 @@ def generate_random_sequence(count, length=3):
         list: A sorted list of randomly generated sequences.
     """
     random_sequences: list = []
+    first_slice = _ceil(length / 2)
+    second_slice = (length - first_slice) * -1
+    if numeric_only and string_only:
+        raise ValueError("Only one of numeric_only or string_only can be True.")
 
     for _ in range(count):
-        random_sequence = "".join(random.choices(string.ascii_uppercase, k=length))
+        if numeric_only:
+            random_sequence = "".join(_random.choices(_string.digits, k=length))
+        elif string_only:
+            random_sequence = "".join(_random.choices(_string.ascii_uppercase, k=length))
+        else:
+            random_sequence = "".join(_random.choices(_string.ascii_uppercase, k=length))
+            random_sequence += "".join(_random.choices(_string.digits, k=length))
+            random_sequence = random_sequence[first_slice:second_slice]
         random_sequences.append(random_sequence)
     random_sequences.sort()
     return random_sequences
-
-
-
-for random_sequence in generate_random_sequence(count=sequence):
-    for shot_number in range(shot_count):
-        shot_number *= 10
-        shot_number += 10
-        shot_number = f"{shot_number:04d}"
-
-        shotcode = f"{random_sequence}{shot_number}"
-        new_context_structure: _Dict[str, str] = {
-            "job": project,
-            "sequence": "RD",
-            "shot": shot_number,
-            "shotcode": shotcode,
-            "created_at": _datetime.datetime.now()
-        }
-        new_context_structure: _Dict[str, dict] = {"$set": new_context_structure}
-        update_many_object = _pymongo.UpdateOne({"job": project}, new_context_structure, upsert=True)
-        insert_many.append(update_many_object)
-
-
-_wgid_context_collection.bulk_write(insert_many)
