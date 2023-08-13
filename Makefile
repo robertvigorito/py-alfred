@@ -11,7 +11,7 @@ endef
 export BROWSER_PYSCRIPT
 
 package = alfred
-python_root = ./$(package)
+python_root = ./src/$(package)
 
 BROWSER := python -c "$$BROWSER_PYSCRIPT"
 .PHONY: clean clean-test clean-pyc clean-build docs help script
@@ -27,9 +27,12 @@ clean-build: ## remove build artifacts
 	rm -fr .build/
 	rm -fr dist/
 	rm -fr .eggs/
+	rm -fr cov.xml
+	rm -fr coverage.xml
+	rm -fr dump.rdb
 	find . -name '*.egg-info' -exec rm -fr {} +
 	find . -name '*.egg' -exec rm -f {} +
-
+	
 clean-pyc: ## remove Python file artifacts
 	find . -name '*.pyc' -exec rm -f {} +
 	find . -name '*.pyo' -exec rm -f {} +
@@ -41,6 +44,7 @@ clean-test: ## remove test and coverage artifacts
 	rm -f .coverage
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
+	rm -fr tests/.pytest_cache
 
 clean: clean-test clean-build clean-pyc
 
@@ -52,8 +56,12 @@ docs: ## generate Sphinx HTML documentation, including API docs
 	$(MAKE) -C docs html
 	$(BROWSER) docs/_build/html/index.html
 
-lint:
-	pylint `git ls-files "*.py"`
+lint: 
+ifeq ($1 , )
+	pylint `git ls-files *.py` --exit-zero
+else
+	pylint $1 --exit-zero
+endif 
 
 install: clean
 	pip install --upgrade .
@@ -72,3 +80,6 @@ test-all: ## run tests on every Python version with tox
 script:
 	$(eval SCRIPTS=$(shell find ./scripts -type f -name "*"))
 	@install -v -m 555 $(SCRIPTS) /software/scripts/
+
+coverage: ## check code coverage quickly with the default Python
+	wslview ./htmlcov/index.html

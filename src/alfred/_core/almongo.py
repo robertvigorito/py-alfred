@@ -7,13 +7,9 @@ from enum import Enum as _Enum
 import dotenv as _dotenv
 import pymongo as _pymongo
 
-# Protect the module from being imported from any package other than alfred._core.controller
-if __name__ != "alfred._core.controller":
-    raise ImportError("This module is protected can only be imported from alfred._core.controller.")
-
 
 _dotenv.load_dotenv()
-    
+
 
 @_lru_cache(maxsize=None)
 def __initiate_database():
@@ -30,18 +26,18 @@ def __initiate_database():
     host: str = _os.getenv("DB_CLIENT_HOST", "")
     db_main_name: str = _os.getenv("DB_MAIN_NAME", "")
 
-    wgid_mongo_client = _pymongo.MongoClient(
-        username=username, password=password, host=host
-    )
+    wgid_mongo_client = _pymongo.MongoClient(username=username, password=password, host=host)
     wgid_database = wgid_mongo_client.get_database(name=db_main_name)
 
     return wgid_database
 
 
 class Collections(_Enum):
-    contexts = "contexts"
-    assets = "assets"
-    renders = "renders"
+    """The almongo collections for the pymongo database."""
+
+    contexts = "contexts"  # pylint: disable=C0103
+    assets = "assets"  # pylint: disable=C0103
+    renders = "renders"  # pylint: disable=C0103
 
 
 contexts = __initiate_database()[Collections.contexts.value]

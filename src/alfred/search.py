@@ -1,130 +1,79 @@
-""" Alfred Search Module.
+"""This module provides functions for querying and retrieving data from the Alfred controller.
+
+Functions:
+- all_projects(): Returns a list of all projects in the Alfred controller.
+- all_sequences(project: str): Returns a list of all sequences for the given project.
+- all_sequences_shots(project: str, sequence: Optional[str] = None): Returns a dictionary of all shots for the given project and sequence.
+
+Usage:
+    import alfred.search as search
+
+    # Get all projects
+    projects = search.all_projects()
+
+    # Get all sequences for a project
+    sequences = search.all_sequences(project="my_project")
+
+    # Get all shots for a project and sequence
+    shots = search.all_sequences_shots(project="my_project", sequence="my_sequence")
 """
-import warnings
-from collections import defaultdict
-
-from alfred._core.connect import cursor
+from typing import Optional
+from alfred._core import controller as _controller
 
 
-def _details(query):
+def all_projects():
+    """Returns all projects.
+
+    Returns:
+        list[dict]: The projects.
     """
-    Query the `wgid` database based off the command.
+    all_projects_ = set()
+    for context in _controller.find():
+        all_projects_.add(context.job)
+    all_projects_ = tuple(all_projects_)
+
+    return all_projects_
+
+
+def all_sequences(project: str):
+    """Returns all sequences for the given project.
 
     Args:
-        query (str):        SQL command
+        project (str): The project.
 
     Returns:
-        (dict) with the query details or empty list.
+        list[dict]: The sequences.
     """
-    # Needs to be before execute, find the columns
-    details = {}
-    cursor.execute(query)
-    columns = [column[0] for column in cursor.description]
+    all_sequences_ = set()
+    for context in _controller.find(query={"job": project}):
+        all_sequences_.add(context.sequence)
+    all_sequences_ = tuple(all_sequences_)
 
-    # Create a dictionary from the data with key tuple of (id, code) ->> id is unique
-    for job in cursor.fetchall():
-        job_dict = {}
-        for info, column in zip(job, columns):
-            job_dict[column] = info
-
-        _id, code = job_dict.get("id"), job_dict.get("code")
-        details[(_id, code)] = job_dict
-
-    return details
+    return all_sequences_
 
 
-def jobs(job=None):
-    """
-    Search the `WGIT` database for all job information or if job provided,
-    then return details for the job.
-
-    Keyword Args:
-        job (str):      Job name
-
-    Returns:
-        (dict) with the information of all jobs inside the database.
-    """
-    query = "SELECT * FROM jobs"
-    query += f" Where code='{job.upper()}';" if job else ";"
-
-    return _details(query)
-
-
-def renders():
-    """Temp docstring.
-    """
-    warnings.warn("Render query is under development...")
-
-
-def scenes(job):
-    """
-    Search the `WGIT` database for all scene(s) information or if job provided,
-    then return details for the scenes.
-
-    Keyword Args:
-        job (str):      Job name
-
-    Returns:
-        (dict) with the information of all jobs inside the database.
-    """
-    query = "SELECT * FROM scenes"
-    query += f" Where code='{job.upper()}';" if job else ";"
-
-    return _details(query)
-
-
-def shots(job=None, scene=None, shot=None, shot_name=None):
-    """
-    Search the `WGIT` database for all shot information or if scene, shot provided,
-    then return details for the shot.
+def all_sequences_shots(project: str, sequence: Optional[str] = None):
+    """Returns all shots for the given project and sequence.
 
     Args:
-        job (str):          Job name
-
-    Keyword Args:
-        scene (str):        Scene name, defaults to None
-        shot (str):         Shot name, defaults to None
-        shot_name (str):    Full shot name, defaults to None
+        project (str): The project.
+        sequence (str): The sequence.
 
     Returns:
-        (dict) with the information of all shot(s) inside the database.
     """
-    if shot_name:
-        query = f"SELECT * FROM shots WHERE name='{shot_name.upper()}'"
-        deats = _details(query)
-        key = list(deats.keys())[0]
-        return deats.get(key)
+    query = {"job": project}
+    if sequence:
+        query["sequence"] = sequence
 
-    assert job, "job is required when querying with out shot name!"
-    query = f"SELECT * FROM shots WHERE job='{job.upper()}'"
-    query += f" and scene='{str(scene)}'" if scene else ""
-    query += f" and code='{str(shot)}';" if shot else ";"
+    sequence_shot_query = _controller.find(query=query, projection={"shot": 1, "sequence": 1})
+    sequence_shot_structure = {}
+    for context in sequence_shot_query:
+        if context.shot in sequence_shot_structure.get(context.sequence, []):
+            continue
+        sequence_shot_structure.setdefault(context.sequence, []).append(context.shot)
 
-    return _details(query)
-
-
-def versions():
-    """Temp docstring.
-    """
-    warnings.warn("Version query is under development...")
+    return sequence_shot_structure
 
 
-def scenes_shots(job):
-    """
-    Query for all scenes with shot list.
-
-    Args:
-        job (str):      Job name
-
-    Returns:
-        (dict) scene key, with shot items
-    """
-    details = defaultdict(set)
-    query = "SELECT scene, name FROM shots"
-    query += f" Where job='{job.upper()}';" if job else ";"
-    cursor.execute(query)
-
-    for row, items in cursor.fetchall():
-        details[row].add(items)
-
-    return details
+find = _controller.find
+find_one = _controller.find_one

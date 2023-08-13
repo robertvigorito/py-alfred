@@ -9,30 +9,30 @@ from dataclasses import (
 from typing import Optional
 
 # Wgid Modules
-from alfred.models.abstract_model import AbstractDuck as _AbstractDuck
+from alfred.models.abstract_duck import AbstractDuck as _AbstractDuck
 from alfred import structure as _structure
 
 
 # TODO: Move to the structure module
-def build_root(job: str, sequence: Optional[str] = None, shot: Optional[str] = None):
+def build_root(project: str, sequence: Optional[str] = None, shot: Optional[str] = None):
     """This code is creating a function called build_root that is returning the root
     of the _Context class.
 
     Args:
-        job (str): The job name.
+        project (str): The project name.
         sequence (Optional[str], optional): The sequence name. Defaults to None.
         shot (Optional[str], optional): The shot name. Defaults to None.
 
     Returns:
         str: The root of the _Context class.
     """
-    root = str(_structure.Root.ADJOINT_SHOT.value).format(job=job, sequence=sequence, shot=shot)
+    root = str(_structure.Root.ADJOINT_SHOT.value).format(project=project, sequence=sequence, shot=shot)
     return root
 
 
 @_dataclass(slots=True, frozen=False, repr=True)
 class Context(_AbstractDuck):  # pylint: disable=R0903
-    """This code is creating a class called _Context and  assigning variables to it. The
+    """This code is creating a class called Context and  assigning variables to it. The
     variables are of type int, str, _datetime, and str. The _field method  is being used
     to set the default  value  for each of the variables  to a string. This is done with
     the default_factory parameter. The _Context class is used to store information related
@@ -43,8 +43,15 @@ class Context(_AbstractDuck):  # pylint: disable=R0903
     sequence: Optional[str] = _field(default=None)
     shot: Optional[str] = _field(default=None)
 
-    # The root is a property that is calculated based on the job, sequence, and shot
-    root: str = _field(init=False, repr=False, default=build_root(job=project, sequence=sequence, shot=shot))
+    root: str = _field(default_factory=str, repr=False)
+
+    def __post_init__(self):
+        """Initialize the post initiation of the Context class."""
+        self.root = build_root(project=self.project, sequence=self.sequence, shot=self.shot)
+    
+    def __eq__(self, other: "Context") -> bool:
+        """Override the __eq__ method to compare the Context class."""
+        return self._id == other._id and self.root == other.root
 
     # Validate the entry in the database
     def validate(self, force: bool = False):

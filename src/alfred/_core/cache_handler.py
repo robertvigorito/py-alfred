@@ -1,14 +1,36 @@
 """Alfred cache handler utilizing the redis framework.
 """
-from dataclasses import dataclass, field
+from functools import wraps
+import gc as _gc
 import pickle as _pickle
-from typing import Any, Generator
 
+from dataclasses import dataclass, field
+from typing import Any, Callable, Generator
+
+# Redis Modules
 from redis import Redis as _Redis
 
 
+# Disable garbage collection to prevent the redis cache from being cleared
+_gc.set_threshold(1000, 10, 5)
+_gc.disable()
+
+# Redis cache instance and constants
+
+# Check the redis server is running
+try:
+    _redis_cache = _Redis(host="localhost", port=6379, db=0)
+    _redis_cache.ping()
+except Exception:
+    # Start the redis server if it is not running
+    import subprocess
+    subprocess.Popen(["redis-server"]).wait()
+    
+
+
+
 _redis_cache = _Redis()
-CACHE_LENGTH = 10
+CACHE_LENGTH = 20
 QUERY_KEY = "query"
 
 
@@ -23,7 +45,7 @@ class Cache:
         query (dict): A dictionary that stores the query and corresponding result.
     """
 
-    func: callable = None  # noqa: E203
+    func: Callable  # noqa: E203
 
     args: tuple = field(default_factory=tuple)
     kwargs: dict = field(default_factory=dict)
@@ -41,14 +63,13 @@ class Cache:
             Either an Any object or a Generator object of Any type.
         """
         self.args, self.kwargs = args, kwargs
-        self.parse_query()
-        key_as_bytes = bytes(self.query)
 
-        cached_results = _redis_cache.get(key_as_bytes)
+        key_as_bytes = str(self.args) + str(self.kwargs)        
+        cached_results = _redis_cache.get(key_as_bytes.encode())
         if cached_results:
             return _pickle.loads(cached_results)
 
-        pickle_results = original_results = self.func(query=self.query, *args, **kwargs)
+        pickle_results = original_results = self.func(*args, **kwargs)
 
         # If the results is a generator, sort the data by expanding to a list
         if isinstance(pickle_results, Generator):
@@ -81,7 +102,7 @@ class Cache:
         return True
 
     @classmethod
-    def decorator(cls, func) -> "Cache":
+    def decorator(cls, func):
         """Instantiates a new object of the class with the given function.
 
         Args:
@@ -91,4 +112,9 @@ class Cache:
         Returns:
             A new object of the given class with the specified function.
         """
-        return cls(func=func)
+        # Wrap the function with the class callable method
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            return cls(func)(*args, **kwargs)
+        
+        return wrapper

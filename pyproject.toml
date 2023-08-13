@@ -65,6 +65,7 @@ redis = "^4.6.0"
 toml = "^0.10.2"
 pytest = "^7.2.1"
 pytest-cov = "^4.1.0"
+pytest-sugar = "^0.9.7"
 
 [build-system]
 requires = ["setuptools"]
@@ -72,7 +73,6 @@ build-backend = "setuptools.build_meta"
 
 [tool.pylint.'MESSAGES CONTROL']
 max-line-length = 120
-disable = "C0330, R0201, 0326"
 
 [tool.tox]
 legacy_tox_ini = """

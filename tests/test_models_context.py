@@ -12,14 +12,14 @@ import os
 import pytest
 
 # Wgid Modules
-from alfred.models.contexts import context
+from alfred.models.contexts import Context as context
 
 
 @pytest.fixture
 def context_structure() -> dict[str, Any]:
     """Create a dictionary that contains the context structure."""
     return {
-        "job": "pytest",
+        "project": "pytest",
         "sequence": "playground",
         "shot": "deleteme",
     }
